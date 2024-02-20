@@ -1,0 +1,73 @@
+using System;
+
+// 1. Abstracción
+public abstract class Vehiculo
+{
+    // Método abstracto para obtener la información del vehículo
+    public abstract string ObtenerInformacion();
+}
+
+// 2. Encapsulación
+public class Automovil : Vehiculo
+{
+    private string Marca;
+    private string Modelo;
+    private int Año;
+
+    public Automovil(string marca, string modelo, int anio)
+    {
+        this.Marca = marca;
+        this.Modelo = modelo;
+        this.Año = anio;
+    }
+
+    public override string ObtenerInformacion()
+    {
+        return $"Automóvil: {Marca}, Modelo: {Modelo}, Año: {Año}";
+    }
+}
+
+// 3. Polimorfismo
+public class CatalogoVehiculos
+{
+    public void ImprimirInformacionVehiculo(Vehiculo vehiculo)
+    {
+        Console.WriteLine(vehiculo.ObtenerInformacion());
+    }
+}
+
+// 4. Herencia
+public class Camion : Vehiculo
+{
+    private string marca;
+    private string modelo;
+    private int capacidadCarga;
+
+    public Camion(string marca, string modelo, int capacidadCarga)
+    {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.capacidadCarga = capacidadCarga;
+    }
+
+    public override string ObtenerInformacion()
+    {
+        return $"Camión: {marca}, Modelo: {modelo}, Capacidad de carga: {capacidadCarga} toneladas";
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Agregar vehiculo
+        Automovil automovil = new Automovil("Toyota","Hilux", 2024); 
+        Automovil Pickup = new Automovil("Toyota","Corolla", 2022);
+        Camion camion = new Camion("Volvo", "FH16", 30);
+
+        CatalogoVehiculos catalogo = new CatalogoVehiculos();
+
+        catalogo.ImprimirInformacionVehiculo(automovil);
+        catalogo.ImprimirInformacionVehiculo(camion);
+    }
+}
