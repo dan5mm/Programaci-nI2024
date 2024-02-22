@@ -1,0 +1,172 @@
+using System;
+using System.Collections.Generic;
+
+// Definición de la clase Persona
+public class Persona
+{
+    // Atributos de la clase Persona
+    public string Nombre { get; set; }
+    public string Apellido { get; set; }
+    public DateTime FechaNacimiento { get; set; }
+    public string Telefono { get; set; }
+    public string Direccion { get; set; }
+
+    // Constructor de la clase Persona
+    public Persona(string nombre, string apellido, DateTime fechaNacimiento, string telefono, string direccion)
+    {
+        // Validaciones de los datos
+        if (string.IsNullOrWhiteSpace(nombre))
+            throw new ArgumentException("El nombre no puede estar vacío", nameof(nombre));
+
+        if (string.IsNullOrWhiteSpace(apellido))
+            throw new ArgumentException("El apellido no puede estar vacío", nameof(apellido));
+
+        if (fechaNacimiento >= DateTime.Now)
+            throw new ArgumentException("La fecha de nacimiento debe ser anterior a la fecha actual", nameof(fechaNacimiento));
+
+        if (string.IsNullOrWhiteSpace(telefono))
+            throw new ArgumentException("El teléfono no puede estar vacío", nameof(telefono));
+
+        if (string.IsNullOrWhiteSpace(direccion))
+            throw new ArgumentException("La dirección no puede estar vacía", nameof(direccion));
+
+        // Asignación de valores
+        Nombre = nombre;
+        Apellido = apellido;
+        FechaNacimiento = fechaNacimiento;
+        Telefono = telefono;
+        Direccion = direccion;
+    }
+}
+
+// Definición de la clase Alumno que hereda de Persona
+public class Alumno : Persona
+{
+    // Atributos adicionales de la clase Alumno
+    public string Carnet { get; set; }
+    public DateTime FechaIngreso { get; set; }
+
+    // Constructor de la clase Alumno
+    public Alumno(string nombre, string apellido, DateTime fechaNacimiento, string telefono, string direccion, string carnet, DateTime fechaIngreso)
+        : base(nombre, apellido, fechaNacimiento, telefono, direccion)
+    {
+        // Asignación de valores adicionales
+        Carnet = carnet;
+        FechaIngreso = fechaIngreso;
+    }
+}
+
+// Definición de la clase Profesor que hereda de Persona
+public class Profesor : Persona
+{
+    // Atributos adicionales de la clase Profesor
+    public string Especialidad { get; set; }
+    public decimal Salario { get; set; }
+
+    // Constructor de la clase Profesor
+    public Profesor(string nombre, string apellido, DateTime fechaNacimiento, string telefono, string direccion, string especialidad, decimal salario)
+        : base(nombre, apellido, fechaNacimiento, telefono, direccion)
+    {
+        // Asignación de valores adicionales
+        Especialidad = especialidad;
+        Salario = salario;
+    }
+}
+
+// Definición de la clase Curso
+public class Curso
+{
+    public string Nombre { get; set; }
+    public List<Alumno> Alumnos { get; set; }
+
+    public Curso(string nombre)
+    {
+        Nombre = nombre;
+        Alumnos = new List<Alumno>();
+    }
+}
+
+// Definición de la clase Asignatura
+public class Asignatura
+{
+    public required string Nombre { get; set; }
+    public required string ProfesorAsignado { get; set; }
+}
+
+// Definición de la clase Aula
+public class Aula
+{
+    public string Nombre { get; set; }
+    public List<Curso> Cursos { get; set; }
+
+    public Aula(string nombre)
+    {
+        Nombre = nombre;
+        Cursos = new List<Curso>();
+    }
+}
+
+// Definición de la clase Horario
+public class Horario
+{
+    public List<(string Dia, string Hora, Asignatura Asignatura)> HorarioClases { get; set; }
+
+    public Horario()
+    {
+        HorarioClases = new List<(string Dia, string Hora, Asignatura Asignatura)>();
+    }
+
+    public void AgregarClase(string dia, string hora, Asignatura asignatura)
+    {
+        HorarioClases.Add((dia, hora, asignatura));
+    }
+}
+
+// Definición de la clase Calificación
+public class Calificacion
+{
+    public required Alumno Alumno { get; set; }
+    public required Asignatura Asignatura { get; set; }
+    public float Nota { get; set; }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Creación de instancias para probar las clases
+        Persona persona1 = new Persona("Jose", "Ramos", new DateTime(1990, 5, 15), "6ta", "Calle Principal 2-78");
+        Alumno alumno1 = new Alumno("María", "Gómez", new DateTime(2000, 3, 20), "5ta Av.", "2-78 zona 2", "2023", DateTime.Now);
+        Profesor profesor1 = new Profesor("Daniel", "Morales", new DateTime(1985, 8, 10), "8va Av.", "2-75", "Matemáticas", 2500);
+
+        // Creación de cursos, asignaturas y aulas con datos genéricos
+        Curso curso1 = new Curso("Matemáticas 101");
+        Curso curso2 = new Curso("Historia del Arte");
+        Asignatura asignatura1 = new Asignatura { Nombre = "Álgebra", ProfesorAsignado = "Profesor1" };
+        Asignatura asignatura2 = new Asignatura { Nombre = "Renacimiento", ProfesorAsignado = "Profesor2" };
+        Aula aula1 = new Aula("Aula 101");
+        Aula aula2 = new Aula("Aula 102");
+        Horario horario = new Horario();
+        horario.AgregarClase("Lunes", "8:00 - 10:00", asignatura1);
+        horario.AgregarClase("Martes", "10:00 - 12:00", asignatura2);
+
+        // Prueba de las clases
+        Console.WriteLine("Información de la persona:");
+        Console.WriteLine($"Nombre: {persona1.Nombre}");
+        Console.WriteLine($"Apellido: {persona1.Apellido}");
+        Console.WriteLine($"Fecha de Nacimiento: {persona1.FechaNacimiento.ToShortDateString()}");
+        Console.WriteLine($"Teléfono: {persona1.Telefono}");
+        Console.WriteLine($"Dirección: {persona1.Direccion}");
+        Console.WriteLine();
+
+        Console.WriteLine("Información del alumno:");
+        Console.WriteLine($"Nombre: {alumno1.Nombre}");
+        Console.WriteLine($"Apellido: {alumno1.Apellido}");
+        Console.WriteLine($"Fecha de Nacimiento: {alumno1.FechaNacimiento.ToShortDateString()}");
+        Console.WriteLine($"Teléfono: {alumno1.Telefono}");
+        Console.WriteLine($"Dirección: {alumno1.Direccion}");
+        Console.WriteLine($"Carnet: {alumno1.Carnet}");
+        Console.WriteLine($"Fecha de Ingreso: {alumno1.Carnet}");
+    }
+}
+
